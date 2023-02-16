@@ -1,0 +1,70 @@
+<!--
+ * @Author: Xueao Li @ DUT
+ * @Date: 2023-02-12 15:16:56
+ * @LastEditors: Xueao Li @ DUT
+ * @LastEditTime: 2023-02-12 20:28:27
+ * @Description: The description of this script.
+ * 
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width-device-width, initial-scale=1.0">
+
+{% include 'ase/db/templates/js.html' %}
+{% include 'ase/db/templates/style.html' %}
+{% block head %}
+{% endblock %}
+
+<title>{% block title %}{% endblock %}</title>
+
+  </head>
+
+  <body {% block BodySettings %}{% endblock %}>
+
+    <div class="container" style="padding: 0px;">
+      <div class="row">
+        <nav class="navbar navbar-default">
+          <div class="container-fluid">
+            <ul class="nav navbar-nav navbar-right">
+              {% block navbar %}{% endblock %}
+              <!-- 此处加上了back to main page 功能-->
+              <li><a href="http://lods.org.cn/main_page_CN.html">Back to main page</a>
+              </li>
+             
+            </ul>
+             
+          </div>
+          
+        </nav>
+        
+      </div>
+      <img data-v-1cbdd222="" src="static/images/logo.png" width="10%" height="10%"> 
+      
+    </div> <!--end of container-->
+    
+{% block content %}
+
+{% endblock %}
+
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//analytics.escience.org.cn/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '67']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+
+</body>
+
+</html>

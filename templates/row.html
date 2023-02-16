@@ -1,0 +1,202 @@
+{% extends 'ase/db/templates/layout.html' %}
+
+{% macro atoms() %}
+<div class="row">
+  <center>
+    <div id="appdiv"></div>
+  </center>
+  <div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+      <a class="btn" href="/gui/{{ row.id }}">Open ASE's GUI</a>
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-link dropdown-toggle btn-sm"
+                data-toggle="dropdown">
+          Unit cell <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a onclick="repeatCell(1, 1, 1);">1x1x1</a></li>
+        </ul>
+      </div>
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-link dropdown-toggle btn-sm"
+                data-toggle="dropdown">
+          Download <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a href="/atoms/{{ p.name }}/{{ row.id }}/xyz">xyz</a></li>
+
+          <li><a href="/atoms/{{ p.name }}/{{ row.id }}/json">json</a></li>
+        </ul>
+      </div>
+    </div>
+  <div class="col-md-1"></div>
+  </div>
+</div>
+{% endmacro %}
+
+{% macro cell() %}
+{% endmacro %}
+
+
+{% block title %}
+Summary
+{% endblock %}
+
+{% set n1, n2, n3 = d.size %}
+
+{% block head %}
+<script src="{{ url_for('static', filename='jsmol/JSmol.min.js') }}"></script>
+
+<script>
+jmol_isReady = function(applet)
+{
+    Jmol._getElement(applet, "appletdiv").style.border="1px solid lightgray";
+    Jmol.script(jmolApplet0, "set displaycellparameters false;")
+    Jmol.script(jmolApplet0,
+    "load /atoms/{{ p.name }}/{{ row.id }}/cif { {{ n1 }} {{ n2 }} {{ n3 }} };");
+    }
+</script>
+
+<script src="{{ url_for('static', filename='row.js') }}"></script>
+{% endblock %}
+
+{% block navbar %}
+<li>
+  <a href="/{{ p.name }}/">Back to search page</a>
+</li>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <h1>{{ d.formula|safe }}</h1>
+
+  <div class="panel-group">
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="btn-block" data-toggle="collapse" href="#collapse0">
+          Visualization of cluster structure </a>
+        </h4>
+      </div>
+
+      <div id="collapse0" class="panel-collapse collapse in">
+        <div class="panel-body">
+          <div class="col-md-6">
+            <div class="row">
+              {{ atoms() }}
+            </div> <!--END ROW-->
+            <div class="row">
+              {{ cell() }}
+            </div> <!--END ROW-->
+          </div> <!--END col-md-6-->
+        </div> <!--END PANEL BODY-->
+      </div> <!--END COLLAPSE-->
+
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="btn-block" data-toggle="collapse" href="#collapse1">
+          Physical Properties</a>
+        </h4>
+      </div>
+
+      <div id="collapse1" class="panel-collapse collapse in">
+        <div class="panel-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Description</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for key, desc, val in d.table %}
+              {% if key in list1 %}
+                <tr>
+                  <td> {{ key }} </td>
+                  <td> {{ desc }} </td>
+                  <td> {{ val|safe }} </td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+            </tbody>
+          </table>
+        </div> <!--END PANEL BODY-->
+      </div> <!--END COLLAPSE-->
+
+
+
+
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="btn-block" data-toggle="collapse" href="#collapse2">
+          Technical details</a>
+        </h4>
+      </div>
+
+        <div id="collapse2" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Key</th>
+                  <th>Description</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for key, desc, val in d.table %}
+                {% if key in list2 %}
+                  <tr>
+                    <td> {{ key }} </td>
+                    <td> {{ desc }} </td>
+                    <td> {{ val|safe }} </td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+              </tbody>
+            </table>
+          </div> <!--END PANEL BODY-->
+        </div> <!--END COLLAPSE-->
+
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a class="btn-block" data-toggle="collapse" href="#collapse3">
+            Electronic density of states</a>
+          </h4>
+        </div>
+        <div id="collapse3" class="panel-collapse collapse in">
+          <div class="panel-body">
+            {% for key, desc, val in d.table %}
+              {% if key == "filename" %}
+                  <img src="/static/DOS_image/{{ dos_dir }}/{{ val }}.png" referrerpolicy="no-referrer" alt="Density of state" width="30%" height="30%">
+              {% endif %}
+            {% endfor %}
+  
+          </div> <!--END PANEL BODY-->
+        </div> <!--END COLLAPSE-->
+
+    </div> <!--END PANEL-->
+  </div> <!--END PANEL GROUP-->
+</div>
+{% endblock content %}
+
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//analytics.escience.org.cn/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '67']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
