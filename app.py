@@ -169,11 +169,9 @@ def gui(id: int):
     return '', 204, []
 
 
-@app.route('/test')
+@app.route('/lxashuai')
 def test():
-    from pyjokes import get_joke as j
-    return j()
-
+    return render_template("ase/db/templates/cd.html")
 
 @app.route('/robots.txt')
 def robots():
@@ -228,7 +226,8 @@ def add_project(db: Database) -> None:
         'default_columns': default_columns,
         'search_template': 'ase/db/templates/search.html',
         'row_template': 'ase/db/templates/row.html',
-        'table_template': 'ase/db/templates/table.html'}#,
+        'table_template': 'ase/db/templates/table.html',
+        "test_template": 'ase/db/templates/test.html'}#,
     #    'main_page_template': 'ase/db/templates/main_page.html'} ## 加上了主页面模板
 
 print(projects)
