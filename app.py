@@ -126,10 +126,15 @@ def row(project_name: str, uid: str):
 
     element = extract_elements(dct['formula']) # 这个方法暂时这么用，以后需要改。
 
+    type_ = None
     for key, desc, vals in dct['table']:
         if key == "Cluster_type":
             type_ = vals
-    dos_dir = type_+'/'+element #团簇类型/元素（多元团簇时可能有问题）
+
+    if type_:
+        dos_dir = type_+'/'+element #团簇类型/元素（多元团簇时可能有问题）
+    else:
+        dos_dir = ''
     return render_template(project['row_template'],
                            d=dct, row=row, p=project, uid=uid, list1=Physical_list, list2=Technical_list,
                            dos_dir=dos_dir)
