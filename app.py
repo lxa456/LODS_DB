@@ -120,14 +120,18 @@ def row(project_name: str, uid: str):
                                   .format(uid_key=uid_key, uid=uid))
     dct = project['row_to_dict_function'](row, project)
     Physical_list = ["HOMO_DFT","LUMO_DFT","GAP_DFT","HOMO_GW","LUMO_GW","GAP_GW","natoms","formula"\
-        ,"Point_Group"]
+        ,"Point_Group","Cluster_type"]
     Technical_list = ["Reference","Max_Force","TOTEN","Functional","user","ctime","id","unique_id"\
         ,"filename","relaxed","pbc"]
-    #print("dct = ",dct['formula'])
-    dos_dir = extract_elements(dct['formula']) # 这个方法暂时这么用，以后需要改。
-    #print(dos_dir)
+
+    element = extract_elements(dct['formula']) # 这个方法暂时这么用，以后需要改。
+
+    for key, desc, vals in dct['table']:
+        if key == "Cluster_type":
+            type_ = vals
+    dos_dir = type_+'/'+element #团簇类型/元素（多元团簇时可能有问题）
     return render_template(project['row_template'],
-                           d=dct, row=row, p=project, uid=uid, list1=Physical_list, list2 = Technical_list,
+                           d=dct, row=row, p=project, uid=uid, list1=Physical_list, list2=Technical_list,
                            dos_dir=dos_dir)
 
 
