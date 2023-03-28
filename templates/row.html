@@ -168,6 +168,7 @@ jmol_isReady = function(applet)
             Electronic density of states</a>
           </h4>
         </div>
+
         <div id="collapse3" class="panel-collapse collapse in">
           <div class="panel-body">
             {% for key, desc, val in d.table %}
@@ -176,6 +177,38 @@ jmol_isReady = function(applet)
               {% endif %}
             {% endfor %}
   
+          </div> <!--END PANEL BODY-->
+        </div> <!--END COLLAPSE-->
+
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a class="btn-block" data-toggle="collapse" href="#collapse4">
+            Similarity Information</a>
+          </h4>
+        </div>
+
+        <div id="collapse4" class="panel-collapse collapse in">
+          <div class="panel-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>the id of similar cluster</th>
+                  <th>similarity</th>
+                  <th>Link</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for id, val in simi_list %}
+                  <tr>
+                    <td> {{ id }} </td>
+                    <td> {{ val }} </td>
+                    <td> <a href="http://lods.org.cn:8001/default/row/{{ id }}" target="_blank">Link</a>
+                    </td>
+                  </tr>
+              {% endfor %}
+
+              </tbody>
+            </table>
           </div> <!--END PANEL BODY-->
         </div> <!--END COLLAPSE-->
 
