@@ -103,6 +103,15 @@ def update(sid: int, what: str, x: str):
 def row(project_name: str, uid: str):
     """Show details for one database row."""
 
+    def str2list(text):
+        import ast
+        import re
+        text = text.replace(",", " ")
+        text = text.replace('\n', '')
+        xs = re.sub('\s+', ',', text)
+        list1 = ast.literal_eval(xs)
+        return list1
+
     def extract_elements(s):
         import re
         # 找到所有的元素及其数量
@@ -127,17 +136,35 @@ def row(project_name: str, uid: str):
     element = extract_elements(dct['formula']) # 这个方法暂时这么用，以后需要改。
 
     type_ = None
+    #print("TABLE")
+    #print(dct['table'])
+    print(dct)
+    simlarity_id_list, simlarity_val_list = [],[]
     for key, desc, vals in dct['table']:
         if key == "Cluster_type":
             type_ = vals
-
+        if key == "similarity_id":
+           # print("id")
+            simlarity_id_list = str2list(vals)
+            #print(simlarity_id_list)
+        if key == "similarity_val":
+            #print("val")
+            simlarity_val_list = str2list(vals)
+            #print(simlarity_val_list)
+    if simlarity_id_list:
+        simi_list = list(zip(simlarity_id_list, simlarity_val_list))
+    else:
+        simi_list = [("None", "None")]
+    #    simi_dict = dict(zip([0],[0]))
     if type_:
         dos_dir = type_+'/'+element #团簇类型/元素（多元团簇时可能有问题）
     else:
         dos_dir = ''
+    #print(simi_zip)
+    #print(simi_dict)
     return render_template(project['row_template'],
                            d=dct, row=row, p=project, uid=uid, list1=Physical_list, list2=Technical_list,
-                           dos_dir=dos_dir)
+                           dos_dir=dos_dir, simi_list = simi_list) # simi_id=simlarity_id_list, simi_val=simlarity_val_list)
 
 
 @app.route('/atoms/<project_name>/<int:id>/<type>')
