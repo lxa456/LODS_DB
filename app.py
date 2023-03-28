@@ -41,16 +41,9 @@ import os
 
 root = Path(__file__).parent.parent.parent
 app = Flask(__name__, template_folder=str(root))
-#app = Flask(__name__, template_folder='templates')
 
 projects: Dict[str, Dict[str, Any]] = {}
 
-#@app.route('/main_page')
-#def main_page():
-#    os.system('pwd')
-#    return render_template(project['main_page_template'])
-
-#app = Flask(__name__, template_folder=str(root))
 @app.route('/', defaults={'project_name': 'default'})
 @app.route('/<project_name>')
 @app.route('/<project_name>/')
@@ -63,7 +56,7 @@ def search(project_name: str):
     if project_name == 'favicon.ico':
         return '', 204, []  # 204: "No content"
     session = Session(project_name)
-    print(project_name)
+    #print(project_name)
     project = projects[project_name]
     return render_template(project['search_template'],
                            q=request.args.get('query', ''),
@@ -86,8 +79,6 @@ def update(sid: int, what: str, x: str):
 
 
     session = Session.get(sid)
-    print("app:session:")
-    print(session)
     project = projects[session.project_name]
     session.update(what, x, request.args, project)
     table = session.create_table(project['database'],
@@ -98,6 +89,15 @@ def update(sid: int, what: str, x: str):
                            p=project,
                            s=session)
 
+
+#from flask import send_from_directory
+# #尝试给标签页加图标，失败了。
+#@app.route('/favicon.ico')
+#def favicon():
+#    print(os.path.join(app.root_path, 'static'))
+#    return send_from_directory(os.path.join(app.root_path, 'static'),
+#                               'favicon.ico', mimetype='images/favicon.ico')
+#    #return app.send_static_file('images/favicon.ico')
 
 @app.route('/<project_name>/row/<uid>')
 def row(project_name: str, uid: str):
