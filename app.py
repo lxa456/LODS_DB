@@ -104,6 +104,8 @@ def row(project_name: str, uid: str):
     """Show details for one database row."""
 
     def str2list(text):
+        '''把字符串转换成列表。
+        如把 "[[1,2,3],[4,5,6]]" 转换成 [[1,2,3],[4,5,6]] '''
         import ast
         import re
         text = text.replace(",", " ")
@@ -136,35 +138,26 @@ def row(project_name: str, uid: str):
     element = extract_elements(dct['formula']) # 这个方法暂时这么用，以后需要改。
 
     type_ = None
-    #print("TABLE")
-    #print(dct['table'])
-    print(dct)
     simlarity_id_list, simlarity_val_list = [],[]
     for key, desc, vals in dct['table']:
         if key == "Cluster_type":
             type_ = vals
         if key == "similarity_id":
-           # print("id")
             simlarity_id_list = str2list(vals)
-            #print(simlarity_id_list)
         if key == "similarity_val":
-            #print("val")
             simlarity_val_list = str2list(vals)
-            #print(simlarity_val_list)
+
+    simi_list = [("None", "None")]
     if simlarity_id_list:
-        simi_list = list(zip(simlarity_id_list, simlarity_val_list))
-    else:
-        simi_list = [("None", "None")]
-    #    simi_dict = dict(zip([0],[0]))
+        simi_list = list(zip(simlarity_id_list, simlarity_val_list))        
+
+    dos_dir = ''
     if type_:
-        dos_dir = type_+'/'+element #团簇类型/元素（多元团簇时可能有问题）
-    else:
-        dos_dir = ''
-    #print(simi_zip)
-    #print(simi_dict)
+        dos_dir = type_+'/'+element #团簇类型/元素（多元团簇时可能有问题）       
+
     return render_template(project['row_template'],
                            d=dct, row=row, p=project, uid=uid, list1=Physical_list, list2=Technical_list,
-                           dos_dir=dos_dir, simi_list = simi_list) # simi_id=simlarity_id_list, simi_val=simlarity_val_list)
+                           dos_dir=dos_dir, simi_list = simi_list) 
 
 
 @app.route('/atoms/<project_name>/<int:id>/<type>')
@@ -263,10 +256,9 @@ def add_project(db: Database) -> None:
         'search_template': 'ase/db/templates/search.html',
         'row_template': 'ase/db/templates/row.html',
         'table_template': 'ase/db/templates/table.html',
-        "test_template": 'ase/db/templates/test.html'}#,
-    #    'main_page_template': 'ase/db/templates/main_page.html'} ## 加上了主页面模板
+        "test_template": 'ase/db/templates/test.html'}
 
-print(projects)
+#print(projects)
 #db = connect(r"/root/aseDB_flask/ase/db/DATABASE.db")
 db = connect("DATABASE.db")
 #db = connect("As.db")

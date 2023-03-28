@@ -202,8 +202,12 @@ jmol_isReady = function(applet)
                   <tr>
                     <td> {{ id }} </td>
                     <td> {{ val }} </td>
-                    <td> <a href="http://lods.org.cn:8001/default/row/{{ id }}" target="_blank">Link</a>
-                    </td>
+                    {% if id == "None" %}
+                      <td> None </td>
+                    {% else %}
+                      <td> <a href="http://lods.org.cn:8001/default/row/{{ id }}" target="_blank">Link</a>
+                      </td>
+                    {% endif %}
                   </tr>
               {% endfor %}
 
