@@ -133,7 +133,7 @@ def row(project_name: str, uid: str):
     Physical_list = ["HOMO_DFT","LUMO_DFT","GAP_DFT","HOMO_GW","LUMO_GW","GAP_GW","natoms","formula"\
         ,"Point_Group","Cluster_type"]
     Technical_list = ["Reference","Max_Force","TOTEN","Functional","user","ctime","id","unique_id"\
-        ,"filename","relaxed","pbc","calculator_relaxation","calculator_GW"]
+        ,"filename","relaxed","pbc","calculator_relaxation","calculator_GW","energy_above_hull"]
 
     element = extract_elements(dct['formula']) # 这个方法暂时这么用，以后需要改。
 
@@ -260,7 +260,7 @@ def add_project(db: Database) -> None:
 
 #print(projects)
 #db = connect(r"/root/aseDB_flask/ase/db/DATABASE.db")
-db = connect("DATABASE.db")
+db = connect("DATABASE_2023_4_5.db")
 #db = connect("As.db")
 add_project(db)
 
